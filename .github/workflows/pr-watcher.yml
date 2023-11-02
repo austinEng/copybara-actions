@@ -58,6 +58,8 @@ jobs:
                 statusContext: 'import/copybara',
               });
               console.log(result);
-              const statusContext = result.repository.pullRequest.commits[0].nodes[0].commit.status.context;
+              const commit = result.repository.pullRequest.commits[0];
+              console.log(commit);
+              const statusContext = commit.nodes[0].commit.status.context;
               console.log(statusContext);
             }
