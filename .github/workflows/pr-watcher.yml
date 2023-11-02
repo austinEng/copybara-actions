@@ -33,15 +33,14 @@ jobs:
               const sha = pull.head.sha;
               console.log(number, sha);
 
-              const query = `query($owner:String!, $name:String!, $pr_number:Int!) {
+              const query = `query($owner:String!, $name:String!, $pr_number:Int!, $statusContext:String!) {
                 repository(owner:$owner, name:$name) {
                   pullRequest(number:$pr_number) {
                     commits(last:1) {
                       nodes {
                         commit {
                           status {
-                            copybara_import_status: context(name:'import/copybara')
-                            other_status: context(name:'asdff')
+                            context(name: $statusContext)
                           }
                         }
                       }
@@ -53,6 +52,7 @@ jobs:
                 owner: context.repo.owner,
                 name: context.repo.repo,
                 pr_number: pull.number,
+                statusContext: 'import/compybara',
               });
               console.log(result)
             }
