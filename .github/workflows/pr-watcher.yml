@@ -40,7 +40,10 @@ jobs:
                       nodes {
                         commit {
                           status {
-                            context(name: $statusContext)
+                            context(name: $statusContext) {
+                              state
+                              targetUrl
+                            }
                           }
                         }
                       }
