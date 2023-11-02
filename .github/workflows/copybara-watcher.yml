@@ -19,7 +19,10 @@ jobs:
     permissions:
       statuses: write
     steps:
-    - name: Create status
+    - name: Sleep for 30 seconds
+      run: sleep 30s
+      shell: bash
+    - name: Create fake status
       run: |
         curl --request POST \
         --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha || github.event.sha }} \
@@ -32,10 +35,14 @@ jobs:
           }' \
         --fail
 
-  copybara_status:
-    name: comment
-    if: github.event.state == 'success' && github.event.context == 'import/copybara'
+  copybara_import_status:
+    name: Check Import
     runs-on: ubuntu-latest
-    steps:
-    - name: Dump Github Event
-      run: echo '${{ toJSON(github.event) }}'
+      - name: Wait commit status
+        uses: cloudposse/github-action-wait-commit-status@main
+        with:
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          status: import/copybara
+          check-retry-count: 2
+          check-retry-interval: 20
