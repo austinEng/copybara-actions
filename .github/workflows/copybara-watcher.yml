@@ -38,6 +38,7 @@ jobs:
   copybara_import_status:
     name: Check Import
     runs-on: ubuntu-latest
+      steps:
       - name: Wait commit status
         uses: cloudposse/github-action-wait-commit-status@main
         with:
