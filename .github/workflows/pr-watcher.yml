@@ -57,5 +57,5 @@ jobs:
                 pr_number: pull.number,
                 statusContext: 'import/copybara',
               });
-              console.log(JSON.toString(result))
+              console.log(result.toString());
             }
