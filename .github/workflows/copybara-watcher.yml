@@ -1,7 +1,6 @@
 name: Copybara Watcher
 
 on:
-  workflow_run:
   status:
   push:
     branches: [ "main" ]
