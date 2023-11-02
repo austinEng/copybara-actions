@@ -55,7 +55,7 @@ jobs:
               console.log(nodes);
               const commit = nodes[0].commit;
               console.log(commit);
-              if (commit && commit.status) {
-                console.log(pull.number, commit.status.state, commit.status.targetUrl);
+              if (commit && commit.?status.?context) {
+                console.log(pull.number, commit.status.context.state, commit.status.context.targetUrl);
               }
             }
