@@ -53,6 +53,8 @@ jobs:
                 pullNumber: pull.number,
                 statusContext: 'import/copybara',
               });
+              const nodes = result.repository.pullRequest.commits.nodes;
+              console.log(nodes);
               const commit = result.repository.pullRequest.commits.nodes.commit;
               console.log(commit);
               if (commit && commit.status) {
