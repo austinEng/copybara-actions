@@ -10,6 +10,8 @@ jobs:
   check_copybara_import:
     name: Check Copybara Import status
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: List Pull Requests
         uses: actions/github-script@v6
