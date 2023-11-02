@@ -41,6 +41,12 @@ jobs:
                         commit {
                           message
                           messageBody
+                          status {
+                            context(name: $statusContext) {
+                              state
+                              targetUrl
+                            }
+                          }
                         }
                       }
                     }
@@ -56,4 +62,6 @@ jobs:
               console.log(result);
               const commits = result.repository.pullRequest.commits;
               console.log(commits);
+              const statusContext = commits.nodes[0].commit.status.context;
+              console.log(statusContext);
             }
