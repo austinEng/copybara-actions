@@ -39,12 +39,8 @@ jobs:
                     commits(last:1) {
                       nodes {
                         commit {
-                          status {
-                            context(name: $statusContext) {
-                              state
-                              targetUrl
-                            }
-                          }
+                          message
+                          messageBody
                         }
                       }
                     }
@@ -58,8 +54,6 @@ jobs:
                 statusContext: 'import/copybara',
               });
               console.log(result);
-              const commit = result.repository.pullRequest.commits[0];
-              console.log(commit);
-              const statusContext = commit.nodes[0].commit.status.context;
-              console.log(statusContext);
+              const commits = result.repository.pullRequest.commits;
+              console.log(commits);
             }
