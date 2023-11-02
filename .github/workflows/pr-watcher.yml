@@ -40,8 +40,8 @@ jobs:
                       nodes {
                         commit {
                           status {
-                            copybara_import_status: context('import/copybara')
-                            other_status: context('asdff')
+                            copybara_import_status: context(name:'import/copybara')
+                            other_status: context(name:'asdff')
                           }
                         }
                       }
