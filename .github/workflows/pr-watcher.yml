@@ -73,7 +73,6 @@ jobs:
               for await (const { data: timelineData } of timeline) {
                 for (const timelineItem of timelineData) {
                   if (timelineItem.event === 'referenced' && timelineItem.commit_id) {
-                    console.log(timelineItem);
                     try {
                       const compare = await github.rest.repos.compareCommitsWithBasehead({
                         basehead: `${timelineItem.commit_id}...refs/heads/main`,
@@ -81,13 +80,22 @@ jobs:
                         repo: context.repo.repo,
                       });
                       if (compare.data.status == "ahead" || compare.data.status == "identical") {
-                        // This commit has already been merged into main.
+                        // This is a commit that has already been merged into main.
                         const commit = await github.rest.repos.getCommit({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
                           ref: timelineItem.commit_id,
                         });
-                        console.log(commit.data.commit.message);
+                        const message = commit.data.commit.message;
+                        const lines = message.split('\n');
+                        for (const line of lines) {
+                          // Check if the commit has a footer referencing a PR.
+                          const tag = 'GITHUB_PR_HEAD_SHA=';
+                          if (line.startsWith(tag)) {
+                            const sha = line.slice(tag.length);
+                            console.log(sha, pull);
+                          }
+                        }
                       }
                     } catch (err) {
                       // This is OK because not all commits will be comparable.
