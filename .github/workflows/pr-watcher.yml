@@ -63,7 +63,7 @@ jobs:
                   ref: 'main',
                   workflow_id: 'import-commenter.yml',
                   inputs: {
-                    pullNumber: pull.number,
+                    pullNumber: pull.number.toString(),
                     state: commit.status.context.state,
                     targetUrl: commit.status.context.targetUrl,
                   },
