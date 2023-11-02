@@ -32,4 +32,27 @@ jobs:
               const number = pull.number;
               const sha = pull.head.sha;
               console.log(number, sha);
+
+              const query = `query($owner:String!, $name:String!, $pr_number:Int!) {
+                repository(owner:$owner, name:$name) {
+                  pullRequest(number:$pr_number) {
+                    commits(last:1) {
+                      nodes {
+                        commit {
+                          status {
+                            copybara_import_status: context('import/copybara')
+                            other_status: context('asdff')
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }`;
+              const result = await github.graphql(query, {
+                owner: context.repo.owner,
+                name: context.repo.repo,
+                pr_number: pull.number,
+              });
+              console.log(result)
             }
