@@ -22,6 +22,6 @@ jobs:
         --data '{
           "state": "success",
           "context": "import/copybara",
-          "target_url": "example.com/${{ github.sha || github.event.sha }}"
+          "target_url": "${{ github.event.workflow_run.html_url }}"
           }' \
         --fail

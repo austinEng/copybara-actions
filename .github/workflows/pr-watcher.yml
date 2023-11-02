@@ -23,6 +23,10 @@ jobs:
             });
 
             for (const pull of pulls.data) {
+              const number = pull.number;
+              const sha = pull.head.sha;
+              console.log(number, sha);
+
               const query = `query($owner:String!, $name:String!, $pullNumber:Int!, $statusContext:String!) {
                 repository(owner:$owner, name:$name) {
                   pullRequest(number:$pullNumber) {
@@ -47,10 +51,15 @@ jobs:
                 pullNumber: pull.number,
                 statusContext: 'import/copybara',
               });
+              console.log(result);
+              const commits = result.repository.pullRequest.commits;
+              console.log(commits);
+              const nodes = commits.nodes;
+              console.log(nodes);
+              const commit = nodes.commit;
+              console.log(commit);
               const status = result.repository.pullRequest.commits.nodes.commit.status;
-              if (status) {
-                if (status.state == 'success') {
-                  console.log(pull.number, status.targetUrl)
-                }
-              }
+              console.log(status);
+              const statusContext = commit.status.context;
+              console.log(statusContext);
             }
