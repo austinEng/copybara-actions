@@ -1,0 +1,27 @@
+name: Fake Copybara
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  fake_status:
+    name: Add a fake status for testing
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+    steps:
+    - name: Sleep for 30 seconds
+      run: sleep 30s
+      shell: bash
+    - name: Create fake status
+      run: |
+        curl --request POST \
+        --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha || github.event.sha }} \
+        --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+        --header 'content-type: application/json' \
+        --data '{
+          "state": "success",
+          "context": "import/copybara",
+          "target_url": "example.com/${{ github.sha || github.event.sha }}"
+          }' \
+        --fail

@@ -15,27 +15,17 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            let pulls;
-            try {
-              pulls = await github.rest.pulls.list({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: 'open',
-                base: 'main',
-              });
-            } catch (err) {
-              throw err;
-              return;
-            }
+            const pulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              base: 'main',
+            });
 
             for (const pull of pulls.data) {
-              const number = pull.number;
-              const sha = pull.head.sha;
-              console.log(number, sha);
-
-              const query = `query($owner:String!, $name:String!, $pr_number:Int!, $statusContext:String!) {
+              const query = `query($owner:String!, $name:String!, $pullNumber:Int!, $statusContext:String!) {
                 repository(owner:$owner, name:$name) {
-                  pullRequest(number:$pr_number) {
+                  pullRequest(number:$pullNumber) {
                     commits(last:1) {
                       nodes {
                         commit {
@@ -54,18 +44,13 @@ jobs:
               const result = await github.graphql(query, {
                 owner: context.repo.owner,
                 name: context.repo.repo,
-                pr_number: pull.number,
+                pullNumber: pull.number,
                 statusContext: 'import/copybara',
               });
-              console.log(result);
-              const commits = result.repository.pullRequest.commits;
-              console.log(commits);
-              const nodes = commits.nodes;
-              console.log(nodes);
-              const commit = nodes.commit;
-              console.log(commit);
               const status = result.repository.pullRequest.commits.nodes.commit.status;
-              console.log(status);
-              const statusContext = commit.status.context;
-              console.log(statusContext);
+              if (status) {
+                if (status.state == 'success') {
+                  console.log(pull.number, status.targetUrl)
+                }
+              }
             }

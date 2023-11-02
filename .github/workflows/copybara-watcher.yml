@@ -2,8 +2,8 @@ name: Copybara Watcher
 
 on:
   status:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
 
 jobs:
   debug:
