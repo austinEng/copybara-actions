@@ -39,8 +39,6 @@ jobs:
                     commits(last:1) {
                       nodes {
                         commit {
-                          message
-                          messageBody
                           status {
                             context(name: $statusContext) {
                               state
