@@ -92,6 +92,7 @@ jobs:
                           // Check if the commit has a footer referencing a PR.
                           const tag = 'GITHUB_PR_HEAD_SHA=';
                           if (line.startsWith(tag)) {
+                            const sha = line.slice(tag.length);
                             // The merged commit footer matches the PR sha.
                             if (pull.head.sha === sha) {
                               // Close the PR.
