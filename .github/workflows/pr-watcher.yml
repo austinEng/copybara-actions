@@ -55,7 +55,7 @@ jobs:
                 owner: context.repo.owner,
                 name: context.repo.repo,
                 pr_number: pull.number,
-                statusContext: 'import/compybara',
+                statusContext: 'import/copybara',
               });
-              console.log(result)
+              console.log(JSON.toString(result))
             }
