@@ -55,5 +55,16 @@ jobs:
               const commit = nodes[0].commit;
               if (commit && commit.status && commit.status.context) {
                 console.log(pull.number, commit.status.context.state, commit.status.context.targetUrl);
+                await github.rest.actions.createWorkflowDispatch({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: 'main',
+                  workflow_id: 'import-commenter.yml',
+                  inputs: {
+                    pullNumber: pull.number,
+                    state: commit.status.context.state,
+                    targetUrl: commit.status.context.targetUrl,
+                  },
+                });
               }
             }

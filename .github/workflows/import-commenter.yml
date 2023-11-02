@@ -1,0 +1,33 @@
+name: Import Commenter
+
+on:
+  workflow_call:
+    inputs:
+      pullNumber:
+        type: number
+        required: true
+      state:
+        type: string
+        required: true
+      targetUrl:
+        type: string
+
+jobs:
+  debug:
+    name: debug
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump Github Context
+      run: echo '${{ toJSON(github) }}'
+
+  - name: Comment on PR
+    if: inputs.state == 'success' || inputs.state == 'SUCCESS'
+    uses: marocchino/sticky-pull-request-comment@v2
+    with:
+      number: ${{ inputs.pullNumber }}
+      header: pr_was_imported # key to reuse the same comment
+      message: |
+        👋 Thanks for your contribution! Your PR has been imported to Gerrit.
+        Please visit ${{ inputs.targetUrl }} to see it and CC yourself on the change.
+        All comments are handled within Gerrit. Any comments on the GitHub PR may be ignored.
+        You can continue to upload commits to the PR in order to address feedback from Gerrit.
