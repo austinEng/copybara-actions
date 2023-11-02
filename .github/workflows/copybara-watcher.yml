@@ -19,7 +19,7 @@ jobs:
     permissions:
       statuses: write
     steps:
-    - name: Sleep for 30 seconds
+    - name: Sleep for 120 seconds
       run: sleep 30s
       shell: bash
     - name: Create fake status
@@ -46,4 +46,6 @@ jobs:
         sha: ${{ github.sha }}
         status: import/copybara
         check-retry-count: 2
-        check-retry-interval: 20
+        check-retry-interval: 10
+    - name: after commit status wait
+      run: echo 'hello world!'
