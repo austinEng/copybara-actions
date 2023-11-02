@@ -28,7 +28,7 @@ jobs:
               return;
             }
 
-            for (const pull of pulls) {
+            for (const pull of pulls.data) {
               const number = pull.number;
               const sha = pull.head.sha;
               console.log(number, sha);
