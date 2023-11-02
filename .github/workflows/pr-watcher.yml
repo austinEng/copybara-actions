@@ -81,8 +81,7 @@ jobs:
                     });
                     try {
                       const compare = await github.rest.repos.compareCommitsWithBasehead({
-                        base: timelineItem.commit_id,
-                        head: 'refs/heads/main',
+                        basehead: `${timelineItem.commit_id}...refs/heads/main`,
                         owner: context.repo.owner,
                         repo: context.repo.repo,
                       });
