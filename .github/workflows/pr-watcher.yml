@@ -87,7 +87,7 @@ jobs:
                       });
                       if (compare.data.status == "ahead" || compare.data.status == "identical") {
                         // This commit has already been merged into main.
-                        console.log(commit.message);
+                        console.log(commit);
                       }
                     } catch (err) {
                       // This is OK because not all commits will be comparable.
