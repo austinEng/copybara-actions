@@ -25,7 +25,7 @@ jobs:
     if: inputs.state == 'success' || inputs.state == 'SUCCESS'
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      pull-requests: write
     steps:
     - uses: marocchino/sticky-pull-request-comment@v2
       with:
