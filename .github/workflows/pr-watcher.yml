@@ -62,6 +62,10 @@ jobs:
               console.log(result);
               const commits = result.repository.pullRequest.commits;
               console.log(commits);
-              const statusContext = commits.nodes[0].commit.status.context;
+              const nodes = commits.nodes;
+              console.log(nodes);
+              const commit = nodes.commit;
+              console.log(commit);
+              const statusContext = commit.status.context;
               console.log(statusContext);
             }
