@@ -57,5 +57,7 @@ jobs:
                 pr_number: pull.number,
                 statusContext: 'import/copybara',
               });
-              console.log(result.toString());
+              console.log(result);
+              const statusContext = result.repository.pullRequest.commits[0].nodes[0].commit.status.context;
+              console.log(statusContext);
             }
