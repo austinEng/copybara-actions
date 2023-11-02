@@ -1,6 +1,6 @@
 name: PR Watcher
 on:
-  workflow_run:
+  workflow_dispatch:
   # schedule:
   #   - cron: "*/5 * * * *" # Every 5 minutes
 
