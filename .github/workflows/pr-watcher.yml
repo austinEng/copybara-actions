@@ -92,8 +92,21 @@ jobs:
                           // Check if the commit has a footer referencing a PR.
                           const tag = 'GITHUB_PR_HEAD_SHA=';
                           if (line.startsWith(tag)) {
-                            const sha = line.slice(tag.length);
-                            console.log(sha, pull);
+                            // The merged commit footer matches the PR sha.
+                            if (pull.head.sha === sha) {
+                              // Close the PR.
+                              await github.rest.actions.createWorkflowDispatch({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                ref: 'main',
+                                workflow_id: 'pr-manager.yml',
+                                inputs: {
+                                  pullNumber: pull.number.toString(),
+                                  state: 'merged',
+                                  targetUrl: commit.data.html_url,
+                                },
+                              });
+                            }
                           }
                         }
                       }
