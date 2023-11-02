@@ -15,12 +15,18 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const pulls = github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-              base: 'main',
-            });
+            let pulls;
+            try {
+              pulls = await github.rest.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                base: 'main',
+              });
+            } catch (err) {
+              throw err;
+              return;
+            }
 
             for (const pull of pulls) {
               const number = pull.number;
