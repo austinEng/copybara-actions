@@ -38,12 +38,12 @@ jobs:
   copybara_import_status:
     name: Check Import
     runs-on: ubuntu-latest
-      steps:
-      - name: Wait commit status
-        uses: cloudposse/github-action-wait-commit-status@main
-        with:
-          repository: ${{ github.repository }}
-          sha: ${{ github.sha }}
-          status: import/copybara
-          check-retry-count: 2
-          check-retry-interval: 20
+    steps:
+    - name: Wait commit status
+      uses: cloudposse/github-action-wait-commit-status@main
+      with:
+        repository: ${{ github.repository }}
+        sha: ${{ github.sha }}
+        status: import/copybara
+        check-retry-count: 2
+        check-retry-interval: 20
