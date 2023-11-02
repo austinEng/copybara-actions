@@ -34,6 +34,7 @@ jobs:
                       nodes {
                         commit {
                           status {
+                            message,
                             context(name: $statusContext) {
                               state
                               targetUrl
