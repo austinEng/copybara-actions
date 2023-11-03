@@ -1,3 +1,7 @@
+# Workflow that runs every 10 minutes, or manually to check if
+# PRs have been imported into Gerrit and if they have been merged.
+# The workflow adds a PR comment after import and after merged.
+# PRs that are merged upstream are then closed.
 name: PR Watcher
 on:
   workflow_dispatch:
@@ -15,6 +19,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            // Get all open PRs.
             const pulls = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -41,6 +46,8 @@ jobs:
                   }
                 }
               }`;
+
+              // Query the import/copybara status check.
               const result = await github.graphql(query, {
                 owner: context.repo.owner,
                 name: context.repo.repo,
@@ -50,6 +57,7 @@ jobs:
               const nodes = result.repository.pullRequest.commits.nodes;
               const commit = nodes[0].commit;
               if (commit && commit.status && commit.status.context) {
+                // Forward the status check information to the pr-manager workflow.
                 await github.rest.actions.createWorkflowDispatch({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -63,6 +71,9 @@ jobs:
                 });
               }
 
+              // Look through all timeline events on the PR.
+              // When the PR is merged upstream, it will include a backreference back to
+              // the PR in the commit message.
               const timeline = github.paginate.iterator(github.rest.issues.listEventsForTimeline, {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -72,6 +83,8 @@ jobs:
                 for (const timelineItem of timelineData) {
                   if (timelineItem.event === 'referenced' && timelineItem.commit_id) {
                     try {
+                      // Compare commit ids against refs/heads/main to see if they are
+                      // included in the main branch.
                       const compare = await github.rest.repos.compareCommitsWithBasehead({
                         basehead: `${timelineItem.commit_id}...refs/heads/main`,
                         owner: context.repo.owner,

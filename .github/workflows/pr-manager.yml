@@ -1,3 +1,4 @@
+# Sub-workflow to manage commenting on and closing PRs.
 name: PR Manager
 
 on:
